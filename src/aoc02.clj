@@ -14,10 +14,8 @@
 ; Any two adjacent levels differ by at least one and at most three.
 
 (defn safe-delta? [a b]
-  (if (nil? b)
-    true
-    (let [diff (abs (- b a))]
-      (<= 1 diff 3))))
+  (let [diff (abs (- b a))]
+    (<= 1 diff 3)))
 
 (defn status [xs]
   (let [status (cond
@@ -27,6 +25,7 @@
                  :else (loop [inputs xs]
                          (let [[a b & others] inputs]
                            (cond
+                             (not b) :safe
                              (not (safe-delta? a b)) :unsafe
                              :else (if (seq others)
                                      (recur (drop 1 inputs))
