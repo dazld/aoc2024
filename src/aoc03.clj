@@ -28,9 +28,9 @@
          total 0]
     (if (empty? remaining)
       total
-      (let [do-match   (re-find #"do\(\)" remaining)
-            dont-match (re-find #"don\'t\(\)" remaining)
-            ops-match  (re-find #"mul\(\d+,\d+\)" remaining)]
+      (let [do-match   (re-find #"^do\(\)" remaining)
+            dont-match (re-find #"^don\'t\(\)" remaining)
+            ops-match  (re-find #"^mul\(\d+,\d+\)" remaining)]
         (cond
           do-match (recur (subs remaining (count do-match))
                           true
@@ -42,7 +42,6 @@
           (let [[a b] (->> (re-seq #"\d+" ops-match)
                            (map parse-long))
                 next-total (+ total (* a b))]
-            (prn a b ops-match (subs remaining (count ops-match)))
             (recur (subs remaining (count ops-match))
                    multiply?
                    next-total))
@@ -52,5 +51,5 @@
 ;; :tick: 173529487
 (part1 0 (raw-ops))
 
-;; nope 3338216
+;; :tick: 99532691
 (part2 (raw-ops))
